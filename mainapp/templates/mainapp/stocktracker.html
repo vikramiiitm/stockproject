@@ -1,0 +1,73 @@
+{% extends 'mainapp/basic.html' %}
+{% load static %}
+
+
+{% block title %}
+    {% load myfilters %}
+    StockTracker
+{% endblock %}
+
+{% block css %}
+<style>
+  .green {
+    color: green;
+  }
+  .red {
+    color: red;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Price</th>
+            <th scope="col">Previous Close</th>
+            <th scope="col">Open</th>
+            <th scope="col">Change</th>
+            <th scope="col">Market Cap</th>
+            <th scope="col">Volume</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for key, value in data.items %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{key}}</td>
+            <td id="{{key}}_price">{{ value|get:"Quote Price" }}</td>
+            <td id="{{key}}_prevprice">{{ value|get:"Previous Close" }}</td>
+            <td>{{ value|get:"Open" }}</td>
+
+            <td id = "{{key}}_change">
+                <script>
+                    var change = document.getElementById("{{key}}_price").innerHTML - document.getElementById("{{key}}_prevprice").innerHTML;
+                    document.getElementById("{{key}}_change").innerHTML = change;
+                    if (change >= 0){
+                      document.getElementById("{{key}}_change").className = 'green'
+                    } else {
+                      document.getElementById("{{key}}_change").className = 'red' 
+                    }
+                </script>
+            </td>
+
+            <td>{{ value|get:"Market Cap" }}</td>
+            <td>{{ value|get:"Volume" }}</td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+</script>
+{% endblock %}
